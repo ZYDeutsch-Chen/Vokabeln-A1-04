@@ -10,6 +10,8 @@
     <!-- 版本号 - 每次修改代码时更新此版本号，让浏览器认为这是新版本 -->
     <meta name="version" content="1.0.5">
     <title>德语A1词汇卡片 - 名词学习</title>
+    <!-- Favicon - 使用SVG格式，避免404错误 -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📚%3C/text%3E%3C/svg%3E">
     <!-- Font Awesome 已移除，使用 Unicode 符号实现离线使用 -->
     <script>
         // 强制刷新缓存机制 - 解决 Firefox 缓存问题
@@ -271,27 +273,28 @@
         }
         
         @media (max-width: 768px) {
-            /* 移动端卡片高度调整 */
+            /* 移动端顶部栏高度优化 */
             :root {
-                --card-height: 380px;
+                --top-bar-height: 55px; /* 减少顶部栏高度 */
+                --card-height: 300px; /* 减少卡片高度，确保两张卡片能在一屏显示 */
             }
             
             .fixed-top-bar {
                 flex-wrap: wrap;
                 height: auto;
-                min-height: var(--top-bar-height); /* 使用CSS变量 */
-                padding: 10px 12px;
-                gap: 12px;
+                min-height: var(--top-bar-height);
+                padding: 6px 10px; /* 减少padding */
+                gap: 8px; /* 减少gap */
             }
             
             .top-bar-left {
                 width: 100%;
                 justify-content: space-between;
-                margin-bottom: 6px;
+                margin-bottom: 4px; /* 减少margin */
             }
             
             .top-bar-title {
-                font-size: 1rem;
+                font-size: 0.9rem; /* 稍微减小字体 */
             }
             
             .top-bar-center {
@@ -306,26 +309,37 @@
             
             .top-bar-progress {
                 flex-wrap: wrap;
-                gap: 6px;
-                font-size: 0.85rem;
+                gap: 4px; /* 减少gap */
+                font-size: 0.75rem; /* 减小字体 */
             }
             
             body {
-                padding: 12px;
-                padding-top: calc(var(--top-bar-height) + 40px); /* 使用CSS变量计算，移动端需要更多空间 */
+                padding: 8px; /* 减少padding */
+                padding-top: calc(var(--top-bar-height) + 8px); /* 大幅减少padding-top */
+            }
+            
+            .cards-container {
+                gap: 10px; /* 减少卡片间距 */
+                margin-top: 4px; /* 减少margin-top */
+                padding-bottom: 10px; /* 减少padding-bottom */
+            }
+            
+            body.test-mode .cards-container {
+                gap: 6px; /* 测试模式进一步减少间距 */
+                margin-top: 2px;
             }
             
             /* 移动端测试模式标题行优化 */
             body.test-mode .test-title-row {
                 flex-wrap: wrap;
-                gap: 10px;
-                margin-bottom: 9px; /* 10px * 0.9 */
+                gap: 6px; /* 减少gap */
+                margin-bottom: 4px; /* 减少margin */
                 justify-content: flex-start;
             }
             
             body.test-mode .card-title-hint {
                 margin-left: 0;
-                font-size: 1.17rem; /* 1.3rem * 0.9 */
+                font-size: 1rem; /* 减小字体 */
                 font-weight: 500;
                 color: #2c3e50;
             }
@@ -334,73 +348,92 @@
                 flex-direction: row;
                 align-items: center;
                 justify-content: center;
-                gap: 10px;
-                font-size: 0.81rem; /* 0.9rem * 0.9 */
+                gap: 6px; /* 减少gap */
+                font-size: 0.75rem; /* 减小字体 */
             }
             
             body.test-mode .card-title-indicators {
-                font-size: 0.81rem; /* 0.9rem * 0.9 */
+                font-size: 0.75rem; /* 减小字体 */
             }
         }
         
         @media (max-width: 480px) {
-            /* 小屏幕进一步优化 */
+            /* 小屏幕进一步优化 - 确保两张卡片在一屏显示 */
             :root {
-                --card-height: 350px;
+                --top-bar-height: 50px; /* 进一步减少顶部栏高度 */
+                --card-height: 280px; /* 进一步减少卡片高度 */
             }
+/*
+推送当前目录所有文件到GitHub仓库的操作命令如下：
+
+git init
+git remote add origin https://github.com/ZYDeutsch-Chen/Vokabeln-A1-04.git
+git add .
+git commit -m "推送当前目录所有文件"
+git push -u origin master
+*/
             
             .fixed-top-bar {
-                padding: 8px 10px;
-                gap: 10px;
+                padding: 5px 8px; /* 进一步减少padding */
+                gap: 6px; /* 进一步减少gap */
             }
             
             .top-bar-title {
-                font-size: 0.9rem;
+                font-size: 0.85rem; /* 进一步减小字体 */
+            }
+            
+            .top-bar-mode-btn {
+                padding: 6px 12px; /* 减少按钮padding */
+                font-size: 0.8rem; /* 减小按钮字体 */
+            }
+            
+            .top-bar-progress {
+                font-size: 0.7rem; /* 进一步减小字体 */
             }
             
             body {
-                padding: 10px;
-                padding-top: calc(var(--top-bar-height) + 35px);
+                padding: 6px; /* 进一步减少padding */
+                padding-top: calc(var(--top-bar-height) + 6px); /* 进一步减少padding-top */
             }
             
             .cards-container {
-                gap: 15px;
-                margin-top: 8px;
-                padding-bottom: 20px;
+                gap: 8px; /* 进一步减少卡片间距 */
+                margin-top: 2px; /* 进一步减少margin-top */
+                padding-bottom: 8px; /* 进一步减少padding-bottom */
             }
             
             body.test-mode .cards-container {
-                gap: 8px;
-                margin-top: 5px;
+                gap: 4px; /* 测试模式进一步减少间距 */
+                margin-top: 0;
             }
             
             /* 移动端学习模式文字大小优化 */
             .learning-card-front .meaning-display {
-                font-size: 1.6rem;
-                padding: 10px;
+                font-size: 1.4rem; /* 稍微减小字体 */
+                padding: 8px; /* 减少padding */
             }
             
             .learning-card-back .noun-display {
-                font-size: 2.4rem;
+                font-size: 2.2rem; /* 稍微减小字体 */
             }
             
             .learning-card-back .meaning-display {
-                font-size: 1.6rem;
-                padding: 10px;
+                font-size: 1.4rem; /* 稍微减小字体 */
+                padding: 8px; /* 减少padding */
             }
             
             /* 移动端按钮优化 */
             .speak-btn {
-                min-width: 50px;
-                min-height: 50px;
-                font-size: 1.2rem;
+                min-width: 45px; /* 稍微减小按钮 */
+                min-height: 45px;
+                font-size: 1.1rem;
             }
             
             /* 移动端测试选项按钮优化 */
             .test-option {
-                min-height: 50px;
-                padding: 12px 14px;
-                font-size: 1rem;
+                min-height: 45px; /* 稍微减小按钮 */
+                padding: 10px 12px; /* 减少padding */
+                font-size: 0.95rem; /* 稍微减小字体 */
             }
         }
         
@@ -1149,41 +1182,71 @@
 
         @media (max-width: 768px) {
             .test-progress {
-                width: 22px;
-                padding: 8px 4px;
+                width: 20px; /* 稍微减小宽度 */
+                padding: 6px 3px; /* 减少padding */
             }
             
             .progress-bar {
-                width: 12px;
+                width: 10px; /* 稍微减小宽度 */
             }
             
             .progress-label {
-                font-size: 0.6rem;
+                font-size: 0.55rem; /* 稍微减小字体 */
             }
             
             /* 移动端测试卡片内部的进度条样式 */
             .test-card .card-progress {
-                width: 22px;
-                padding: 8px 4px;
+                width: 20px; /* 稍微减小宽度 */
+                padding: 6px 3px; /* 减少padding */
             }
             
             .test-card .card-progress .progress-bar {
-                width: 12px;
+                width: 10px; /* 稍微减小宽度 */
             }
             
             .test-card .card-progress .progress-label {
-                font-size: 0.6rem;
+                font-size: 0.55rem; /* 稍微减小字体 */
+                margin-bottom: 4px; /* 减少margin */
             }
             
-            /* 移动端测试卡片字号调整 */
-            .test-question {
-                font-size: 1.8rem;
-                margin-bottom: 20px;
+            .test-title {
+                font-size: 0.95rem; /* 减小标题字体 */
+                margin-bottom: 10px; /* 减少margin */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .test-progress {
+                width: 18px; /* 进一步减小宽度 */
+                padding: 5px 2px; /* 进一步减少padding */
             }
             
-            .test-option {
-                font-size: 1.1rem;
-                padding: 14px 16px;
+            .progress-bar {
+                width: 9px; /* 进一步减小宽度 */
+            }
+            
+            .progress-label {
+                font-size: 0.5rem; /* 进一步减小字体 */
+            }
+            
+            /* 移动端测试卡片内部的进度条样式 */
+            .test-card .card-progress {
+                width: 18px; /* 进一步减小宽度 */
+                padding: 5px 2px; /* 进一步减少padding */
+            }
+            
+            .test-card .card-progress .progress-bar {
+                width: 9px; /* 进一步减小宽度 */
+            }
+            
+            .test-card .card-progress .progress-label {
+                font-size: 0.5rem; /* 进一步减小字体 */
+                margin-bottom: 3px; /* 进一步减少margin */
+            }
+            
+            .test-title {
+                font-size: 0.85rem; /* 进一步减小标题字体 */
+                margin-bottom: 8px; /* 进一步减少margin */
             }
         }
 
@@ -1300,6 +1363,58 @@
             text-align: left;
             flex-shrink: 0; /* 防止选项被压缩 */
         }
+        
+        /* 移动端测试卡片布局优化 */
+        @media (max-width: 768px) {
+            .test-card .card-front {
+                padding: 12px 0 12px 18px; /* 减少padding */
+            }
+            
+            .test-card .card-front-content {
+                padding-right: 10px; /* 减少padding */
+            }
+            
+            .test-options {
+                gap: 8px; /* 减少选项间距 */
+                margin-top: 12px; /* 减少margin-top */
+            }
+            
+            .test-option {
+                padding: 10px 14px; /* 减少padding */
+                font-size: 1rem; /* 稍微减小字体 */
+            }
+            
+            .test-question {
+                font-size: 1.6rem; /* 减小问题字体 */
+                margin-bottom: 12px; /* 减少margin */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .test-card .card-front {
+                padding: 8px 0 8px 15px; /* 进一步减少padding */
+            }
+            
+            .test-card .card-front-content {
+                padding-right: 8px; /* 进一步减少padding */
+            }
+            
+            .test-options {
+                gap: 6px; /* 进一步减少选项间距 */
+                margin-top: 8px; /* 进一步减少margin-top */
+            }
+            
+            .test-option {
+                padding: 8px 12px; /* 进一步减少padding */
+                font-size: 0.95rem; /* 进一步减小字体 */
+                min-height: 42px; /* 稍微减小最小高度 */
+            }
+            
+            .test-question {
+                font-size: 1.5rem; /* 进一步减小问题字体 */
+                margin-bottom: 10px; /* 进一步减少margin */
+            }
+        }
 
         .test-option:hover {
             border-color: #3498db;
@@ -1330,6 +1445,21 @@
             padding: 0;
             margin-top: 0;
             flex-shrink: 0;
+        }
+        
+        /* 移动端测试标题优化 */
+        @media (max-width: 768px) {
+            .test-title {
+                font-size: 0.95rem;
+                margin-bottom: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .test-title {
+                font-size: 0.85rem;
+                margin-bottom: 8px;
+            }
         }
 
         .test-question {
@@ -1563,7 +1693,7 @@
 </head>
 <body>
     <!-- 初始设置弹窗 -->
-    <div id="setup-modal" class="modal" style="display: none;">
+    <div id="setup-modal" class="modal">
         <div class="modal-content">
             <h2>欢迎使用德语A1词汇学习系统</h2>
             <p>请先完成初始设置</p>
@@ -1819,6 +1949,8 @@
             const modal = document.getElementById(modalId);
             if (modal) {
                 modal.classList.add('show');
+                // 确保移除内联样式，让CSS类生效
+                modal.style.display = '';
             }
         }
         
@@ -1826,6 +1958,8 @@
             const modal = document.getElementById(modalId);
             if (modal) {
                 modal.classList.remove('show');
+                // 确保隐藏
+                modal.style.display = 'none';
             }
         }
 
@@ -2727,74 +2861,132 @@
         function getImagePath(imageName, category) {
             // 根据类别映射到对应的文件夹
             const categoryFolders = {
-                '时间和日期': 'A1W01 时间和日期 30词',
-                '提问和交流': 'A1W02 提问和交流 38词',
-                '衣服': 'A1W03 衣服 18词',
-                '食物': 'A1W04 食物 45词',
-                '居住': 'A1W05 居住 50词',
-                '交通和旅行': 'A1W06 交通和旅行 42词',
-                '购物': 'A1W07 购物 19词',
-                '看医生': 'A1W08 看医生 19词',
-                '银行和邮局': 'A1W09 银行和邮局 22词',
-                '学习和工作': 'A1W10 学习和工作 36词',
-                '业余活动': 'A1W11 业余活动 33词',
-                '文具': 'A1W12 文具 15词（青少年）',
-                '动物': 'A1W13 动物 11词（青少年）'
+                '时间和日期': 'A1W01_Zeit_und_Datum_30Woerter',
+                '提问和交流': 'A1W02_Fragen_und_Kommunikation_38Woerter',
+                '衣服': 'A1W03_Kleidung_18Woerter',
+                '食物': 'A1W04_Lebensmittel_45Woerter',
+                '居住': 'A1W05_Wohnen_50Woerter',
+                '交通和旅行': 'A1W06_Verkehr_und_Reisen_42Woerter',
+                '购物': 'A1W07_Einkaufen_19Woerter',
+                '看医生': 'A1W08_Arztbesuch_19Woerter',
+                '银行和邮局': 'A1W09_Bank_und_Post_22Woerter',
+                '学习和工作': 'A1W10_Lernen_und_Arbeit_36Woerter',
+                '业余活动': 'A1W11_Freizeit_33Woerter',
+                '文具': 'A1W12_Schreibwaren_15Woerter_Jugend',
+                '动物': 'A1W13_Tiere_11Woerter_Jugend'
             };
             
             const folderName = categoryFolders[category];
             
-            // 优先使用同名文件夹下的图片（用户最终会这样做）
-            return `${folderName}/${imageName}`;
+            if (!folderName) {
+                console.warn(`未找到类别 "${category}" 对应的文件夹，使用默认路径`);
+                return imageName;
+            }
+            
+            // 使用正斜杠构建路径（浏览器会自动处理）
+            // 在HTTP服务器环境下，直接使用相对路径即可
+            const path = `${folderName}/${imageName}`;
+            
+            // 调试信息（仅在开发时使用）
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                console.log(`图片路径 [${category}]: ${path}`);
+            }
+            
+            return path;
         }
         
         // 图片加载错误处理
         function handleImageError(imgElement, imageName, category) {
             const categoryFolders = {
-                '时间和日期': 'A1W01 时间和日期 30词',
-                '提问和交流': 'A1W02 提问和交流 38词',
-                '衣服': 'A1W03 衣服 18词',
-                '食物': 'A1W04 食物 45词',
-                '居住': 'A1W05 居住 50词',
-                '交通和旅行': 'A1W06 交通和旅行 42词',
-                '购物': 'A1W07 购物 19词',
-                '看医生': 'A1W08 看医生 19词',
-                '银行和邮局': 'A1W09 银行和邮局 22词',
-                '学习和工作': 'A1W10 学习和工作 36词',
-                '业余活动': 'A1W11 业余活动 33词',
-                '文具': 'A1W12 文具 15词（青少年）',
-                '动物': 'A1W13 动物 11词（青少年）'
+                '时间和日期': 'A1W01_Zeit_und_Datum_30Woerter',
+                '提问和交流': 'A1W02_Fragen_und_Kommunikation_38Woerter',
+                '衣服': 'A1W03_Kleidung_18Woerter',
+                '食物': 'A1W04_Lebensmittel_45Woerter',
+                '居住': 'A1W05_Wohnen_50Woerter',
+                '交通和旅行': 'A1W06_Verkehr_und_Reisen_42Woerter',
+                '购物': 'A1W07_Einkaufen_19Woerter',
+                '看医生': 'A1W08_Arztbesuch_19Woerter',
+                '银行和邮局': 'A1W09_Bank_und_Post_22Woerter',
+                '学习和工作': 'A1W10_Lernen_und_Arbeit_36Woerter',
+                '业余活动': 'A1W11_Freizeit_33Woerter',
+                '文具': 'A1W12_Schreibwaren_15Woerter_Jugend',
+                '动物': 'A1W13_Tiere_11Woerter_Jugend'
             };
             
             const folderName = categoryFolders[category];
             
-            // 尝试备用路径
-            const fallbackPaths = [
-                `新建文件夹/带水印 40质量 - 带中文解释/${folderName}/${imageName}`,
-                imageName
-            ];
+            // 尝试备用路径（按优先级排序）
+            const fallbackPaths = [];
+            
+            // 1. 尝试未编码的路径（最常用，浏览器通常能正确处理）
+            if (folderName) {
+                fallbackPaths.push(`${folderName}/${imageName}`);
+            }
+            
+            // 2. 尝试编码的路径（如果路径包含特殊字符）
+            if (folderName) {
+                const needsEncoding = /[^\w\-_.\/]/.test(folderName) || /[^\w\-_.]/.test(imageName);
+                if (needsEncoding) {
+                    const encodedPath = folderName.split('/').map(segment => {
+                        return /[^\w\-_.]/.test(segment) ? encodeURIComponent(segment) : segment;
+                    }).join('/') + '/' + (/[^\w\-_.]/.test(imageName) ? encodeURIComponent(imageName) : imageName);
+                    fallbackPaths.push(encodedPath);
+                }
+            }
+            
+            // 3. 尝试直接使用文件名（如果图片在同一目录）
+            fallbackPaths.push(imageName);
+            
+            // 4. 尝试备用文件夹（如果存在）
+            if (folderName) {
+                const backupPath = `新建文件夹/带水印 40质量 - 带中文解释/${folderName}/${imageName}`;
+                fallbackPaths.push(backupPath);
+            }
             
             let currentTry = 0;
+            const maxTries = fallbackPaths.length;
+            
             const tryNextPath = () => {
-                if (currentTry < fallbackPaths.length) {
-                    imgElement.src = fallbackPaths[currentTry];
+                if (currentTry < maxTries) {
+                    const nextPath = fallbackPaths[currentTry];
+                    console.log(`尝试加载图片路径 ${currentTry + 1}/${maxTries}: ${nextPath}`);
+                    imgElement.src = nextPath;
                     currentTry++;
+                    
+                    // 设置超时，如果5秒内未加载成功，尝试下一个路径
+                    const timeout = setTimeout(() => {
+                        if (!imgElement.complete || imgElement.naturalHeight === 0) {
+                            console.warn(`图片加载超时: ${nextPath}`);
+                            tryNextPath();
+                        }
+                    }, 5000);
+                    
+                    // 如果加载成功，清除超时
+                    imgElement.onload = () => {
+                        clearTimeout(timeout);
+                        console.log(`图片加载成功: ${nextPath}`);
+                    };
                 } else {
                     // 所有路径都失败，显示错误信息
+                    console.error(`所有路径都失败，无法加载图片: ${imageName}`);
+                    if (imgElement.parentElement) {
                     imgElement.parentElement.innerHTML = `
                         <div class="image-error">
-                            <span class="icon">🖼️</span><br>
+                                <span class="icon">🖼️</span><br>
                             图片加载失败<br>
                             <small>${imageName}</small><br>
-                            <small style="font-size: 0.8rem; margin-top: 5px;">请检查图片路径</small>
+                                <small style="font-size: 0.8rem; margin-top: 5px;">请检查图片文件是否存在</small>
                         </div>
                     `;
+                    }
                 }
             };
             
-            // 监听图片加载
+            // 清除之前的错误处理
             imgElement.onload = null;
             imgElement.onerror = tryNextPath;
+            
+            // 开始尝试第一个备用路径
             tryNextPath();
         }
         
@@ -2987,8 +3179,19 @@
                 `;
             }
             
+            // 调试信息
+            console.log('=== loadCurrentTheme 开始 ===');
+            console.log('开始加载主题:', learningProgress.currentTheme);
+            console.log('当前模式:', learningProgress.currentMode);
+            console.log('vocabulary类型:', typeof vocabulary);
+            console.log('vocabulary是否为数组:', Array.isArray(vocabulary));
+            if (Array.isArray(vocabulary)) {
+                console.log('vocabulary长度:', vocabulary.length);
+            }
+            
             // 渲染卡片（vocabulary是同步定义的，不需要setTimeout）
             if (learningProgress.currentMode === 'learning') {
+                console.log('进入学习模式渲染流程');
                 // 确保vocabulary数据已加载
                 if (typeof vocabulary === 'undefined' || !Array.isArray(vocabulary)) {
                     console.error('vocabulary数据未定义，无法渲染卡片', typeof vocabulary);
@@ -3000,10 +3203,14 @@
                     return;
                 }
                 
+                console.log('调用 renderVocabularyCards，参数:', learningProgress.currentTheme);
                 renderVocabularyCards(learningProgress.currentTheme);
+                console.log('renderVocabularyCards 调用完成');
             } else {
+                console.log('当前为测试模式，由startTest函数处理');
                 // 测试模式，由startTest函数处理
             }
+            console.log('=== loadCurrentTheme 完成 ===');
         }
 
         // ==================== 学习模式渲染函数 ====================
@@ -3043,11 +3250,15 @@
         
         // 更新渲染函数以使用动态图片路径
         function renderVocabularyCards(category = 'all') {
+            console.log('=== renderVocabularyCards 开始 ===');
+            console.log('参数 category:', category);
+            
             const container = domCache.cardsContainer || document.getElementById('cards-container');
             if (!container) {
                 console.error('cards-container not found');
                 return;
             }
+            console.log('容器元素找到:', container);
             
             // 立即清除加载动画（同步执行，不等待）
             container.innerHTML = '';
@@ -3055,6 +3266,7 @@
             // 检查vocabulary数组是否存在
             if (!vocabulary || !Array.isArray(vocabulary)) {
                 console.error('vocabulary数据未定义或不是数组:', vocabulary);
+                console.error('vocabulary类型:', typeof vocabulary);
                 container.innerHTML = `
                     <div class="loader">
                         <span class="icon">⚠️</span> 词汇数据未加载，请刷新页面重试
@@ -3074,24 +3286,36 @@
                 return;
             }
             
+            console.log('vocabulary数组有效，长度:', vocabulary.length);
+            
             // 处理 category 参数：如果为 null、undefined 或空字符串，使用 'all'
             if (!category || category === 'null' || category === 'undefined') {
                 category = 'all';
             }
+            console.log('处理后的 category:', category);
             
             // 根据类别过滤词汇
             let filteredVocabulary;
             if (category === 'all') {
                 // 创建数组副本并随机排序
                 filteredVocabulary = [...vocabulary].sort(() => Math.random() - 0.5);
+                console.log('使用全部词汇，随机排序后长度:', filteredVocabulary.length);
             } else {
                 filteredVocabulary = vocabulary.filter(item => item.category === category);
+                console.log('过滤类别 "' + category + '" 后长度:', filteredVocabulary.length);
             }
             
             // 更新总数
-            document.getElementById('total-count').textContent = vocabulary.length;
+            const totalCountElement = document.getElementById('total-count');
+            if (totalCountElement) {
+                totalCountElement.textContent = vocabulary.length;
+                console.log('总数已更新:', vocabulary.length);
+            } else {
+                console.warn('total-count 元素未找到');
+            }
             
             if (filteredVocabulary.length === 0) {
+                console.warn('过滤后的词汇为空');
                 container.innerHTML = `
                     <div class="loader">
                         <span class="icon">ℹ️</span> 该类别下没有词汇
@@ -3100,8 +3324,7 @@
                 return;
             }
             
-            // 收集所有图片加载 Promise
-            const imageLoadPromises = [];
+            console.log('开始渲染', filteredVocabulary.length, '张卡片...');
             
             // 使用DocumentFragment批量添加，提高性能
             const fragment = document.createDocumentFragment();
@@ -3136,7 +3359,10 @@
                                     src="${imagePath}" 
                                     alt="${item.meaning}" 
                                     class="noun-image"
+                                    data-image-name="${item.image}"
+                                    data-category="${item.category}"
                                     onerror="handleImageError(this, '${item.image}', '${item.category}')"
+                                    onload="console.log('图片加载成功:', this.src)"
                                 >
                             </div>
                             <!-- 遮挡层：遮挡图片下方的德语信息，直接延伸到卡片底部 -->
@@ -3183,25 +3409,25 @@
                     speakWordAndMeaning(item.noun, item.meaning);
                 });
                 
-                // 创建图片加载 Promise
+                // 图片异步加载，不阻塞页面渲染
                 const img = card.querySelector('.noun-image');
                 if (img) {
-                    const imageLoadPromise = new Promise((resolve) => {
-                        if (img.complete && img.naturalHeight !== 0) {
-                        // 图片已加载完成
-                            resolve();
-                    } else {
-                        // 等待图片加载完成
-                        img.addEventListener('load', () => {
-                                resolve();
-                            }, { once: true });
-                            // 如果图片加载失败，也继续（避免阻塞）
-                            img.addEventListener('error', () => {
-                                resolve();
-                        }, { once: true });
-                    }
-                    });
-                    imageLoadPromises.push(imageLoadPromise);
+                    // 设置加载状态
+                    img.style.opacity = '0';
+                    img.style.transition = 'opacity 0.3s ease';
+                    
+                    // 图片加载成功
+                    img.addEventListener('load', function() {
+                        this.style.opacity = '1';
+                        console.log('图片加载成功:', this.src);
+                    }, { once: true });
+                    
+                    // 图片加载失败（错误处理函数会处理）
+                    img.addEventListener('error', function() {
+                        console.warn('图片加载失败:', this.src);
+                        // 即使失败也显示（错误处理函数会尝试备用路径）
+                        this.style.opacity = '0.5';
+                    }, { once: true });
                 }
                 
                 // 组装包装器（不再添加外部标题）
@@ -3212,24 +3438,24 @@
             
             // 一次性将所有卡片添加到容器，减少DOM操作次数
             container.appendChild(fragment);
+            console.log('所有卡片已添加到DOM，容器子元素数量:', container.children.length);
             
-            // 等待所有图片加载完成后再更新遮挡层高度
-            Promise.all(imageLoadPromises).then(() => {
-                // 所有图片加载完成，更新遮挡层高度
+            // 立即更新遮挡层高度（不等待图片加载，让页面立即显示）
+            requestAnimationFrame(() => {
                 updateOverlayHeights();
-                // 延迟一次更新，确保DOM完全渲染
-            setTimeout(() => {
-                updateOverlayHeights();
-                }, 100);
-            }).catch(() => {
-                // 即使有错误，也更新遮挡层高度
-                updateOverlayHeights();
+                // 延迟再次更新，确保图片加载后也能正确显示
                 setTimeout(() => {
                     updateOverlayHeights();
                 }, 100);
             });
             
-            // 备用方案：如果 Promise.all 超时，仍然更新遮挡层
+            // 图片加载完成后再次更新遮挡层（可选，用于优化显示）
+            setTimeout(() => {
+                updateOverlayHeights();
+                console.log('=== renderVocabularyCards 完成 ===');
+            }, 500);
+            
+            // 最终更新（确保所有图片加载后遮挡层正确）
             setTimeout(() => {
                 updateOverlayHeights();
             }, 2000);
@@ -4348,38 +4574,76 @@
         // 进度条已整合到卡片内部，无需监听窗口大小和滚动事件
         
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== 页面初始化开始 ===');
+            
             // 初始化DOM缓存（必须在最前面，因为其他函数依赖它）
             domCache.init();
+            console.log('DOM缓存初始化完成');
+            
+            // 检查vocabulary数据
+            console.log('vocabulary数据类型:', typeof vocabulary);
+            console.log('vocabulary是否为数组:', Array.isArray(vocabulary));
+            if (Array.isArray(vocabulary)) {
+                console.log('vocabulary数组长度:', vocabulary.length);
+            }
             
             // 加载配置（同步执行，因为vocabulary是同步定义的）
             try {
-            loadUserConfig();
-            loadLearningProgress();
-            
-            // 如果未完成设置，显示设置弹窗
+                loadUserConfig();
+                loadLearningProgress();
+                console.log('用户配置加载完成:', userConfig);
+                console.log('学习进度加载完成:', learningProgress);
+                
+                // 如果未完成设置，显示设置弹窗
                 if (!userConfig || !userConfig.setupCompleted) {
+                    console.log('用户未完成设置，显示设置弹窗');
                     showModal('setup-modal');
                     if (domCache.fixedTopBar) {
                         domCache.fixedTopBar.style.display = 'none';
                     }
-            } else {
-                // 已设置，显示主界面
+                } else {
+                    console.log('用户已完成设置，显示主界面');
+                    
+                    // 检查并修复：如果currentTheme为null，自动设置第一个主题
+                    if (!learningProgress.currentTheme && userConfig.userType) {
+                        console.log('检测到currentTheme为null，自动设置第一个主题');
+                        const themes = themeOrder[userConfig.userType];
+                        if (themes && themes.length > 0) {
+                            learningProgress.currentTheme = themes[0];
+                            learningProgress.currentThemeIndex = 0;
+                            // 如果themes对象为空，初始化它
+                            if (!learningProgress.themes || Object.keys(learningProgress.themes).length === 0) {
+                                initializeLearningProgress();
+                            } else {
+                                // 只更新currentTheme和currentThemeIndex
+                                saveLearningProgress();
+                            }
+                            console.log('已自动设置主题为:', learningProgress.currentTheme);
+                        }
+                    }
+                    
+                    // 已设置，显示主界面
                     if (domCache.fixedTopBar) {
                         domCache.fixedTopBar.style.display = 'flex';
                     }
                     updateHeaderDescription();
-                updateTopBarProgress();
-                updateCurrentThemeDisplay();
+                    updateTopBarProgress();
+                    updateCurrentThemeDisplay();
                     
                     // 加载当前主题（内部会检查vocabulary）
-                loadCurrentTheme();
+                    console.log('开始加载当前主题...');
+                    loadCurrentTheme();
+                    console.log('loadCurrentTheme函数已调用');
+                    
                     // 延迟执行，确保卡片已渲染后再更新遮挡层高度
                     setTimeout(() => {
                         updateOverlayHeights();
+                        console.log('遮挡层高度已更新');
                     }, 100);
                 }
             } catch (e) {
                 console.error('初始化失败:', e);
+                console.error('错误堆栈:', e.stack);
                 // 即使出错也显示设置界面
                 showModal('setup-modal');
                 if (domCache.fixedTopBar) {
@@ -4388,6 +4652,7 @@
             }
             
             initSpeech(); // 初始化语音功能
+            console.log('=== 页面初始化完成 ===');
         });
     </script>
 </body>
