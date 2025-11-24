@@ -104,6 +104,12 @@
             --body-padding-top: calc(var(--top-bar-height) + 15px); /* 为固定栏留出空间 */
         }
         
+        html {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -112,6 +118,9 @@
             padding: 15px;
             padding-top: var(--body-padding-top); /* 使用CSS变量，继承关系 */
             min-height: 100vh;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
         }
         
         /* 固定悬浮栏 - 品牌感设计 */
@@ -138,6 +147,14 @@
             align-items: center;
             gap: 20px;
             flex-shrink: 0;
+        }
+
+        .top-bar-bottom-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex: 1;
         }
         
         .top-bar-title {
@@ -195,7 +212,7 @@
         }
         
         .current-theme-display {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
             padding: 8px 16px;
@@ -203,6 +220,7 @@
             border-radius: 8px;
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            width: auto;
         }
         
         .current-theme-label {
@@ -278,6 +296,10 @@
                 --top-bar-height: 80px; /* 调整为2行布局高度 */
                 --card-height: 300px; /* 减少卡片高度，确保两张卡片能在一屏显示 */
             }
+
+            body.test-mode {
+                --card-height: 360px; /* 测试模式单卡显示，留出更大高度 */
+            }
             
             .fixed-top-bar {
                 flex-direction: column;
@@ -286,6 +308,16 @@
                 min-height: var(--top-bar-height);
                 padding: 6px 10px; /* 减少padding */
                 gap: 6px; /* 减少gap */
+            }
+
+            .top-bar-bottom-row {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 6px;
+                flex-wrap: wrap;
+                row-gap: 6px;
             }
             
             /* 第一行：标题和模式按钮 */
@@ -307,28 +339,89 @@
             
             /* 第二行：当前学习主题和统计信息 */
             .top-bar-center {
-                width: 100%;
+                width: auto;
                 justify-content: flex-start;
-                flex-shrink: 0;
+                flex: 0 0 auto;
                 order: 2;
+                min-width: 0;
             }
             
             .top-bar-right {
-                width: 100%;
-                justify-content: flex-start;
-                flex-shrink: 0;
-                order: 3;
+                width: auto;
+                justify-content: flex-end;
+                flex: 1 1 auto;
+                order: 2;
+                min-width: 0;
             }
             
             .top-bar-progress {
                 flex-wrap: nowrap;
                 gap: 8px; /* 增加gap以便更好显示 */
                 font-size: 0.75rem; /* 减小字体 */
+                justify-content: flex-end;
+            }
+
+            .top-bar-progress .progress-stat.learning {
+                display: none;
             }
             
             .current-theme-display {
                 padding: 4px 12px; /* 减少padding */
                 font-size: 0.8rem; /* 稍微减小字体 */
+                width: auto;
+                flex: 0 0 auto;
+                min-width: 0;
+                max-width: 100%;
+                white-space: nowrap;
+            }
+            
+            body.test-mode .fixed-top-bar,
+            body.test-mode .top-bar-left {
+                width: 100%;
+            }
+            
+            body.test-mode .top-bar-bottom-row {
+                width: 100%;
+                flex-wrap: nowrap;
+                align-items: center;
+            }
+            
+            body.test-mode .top-bar-center {
+                width: auto;
+                flex: 0 1 auto;
+                min-width: 0;
+            }
+            
+            body.test-mode .top-bar-right {
+                width: auto;
+                flex: 1 1 auto;
+                min-width: 0;
+            }
+
+            .learning-card-back .card-hint {
+                display: none;
+            }
+
+            body.test-mode .test-card {
+                min-height: var(--card-height);
+            }
+
+            .test-feedback {
+                gap: 8px;
+            }
+
+            .test-feedback .chinese-section {
+                flex: 0 0 auto;
+                padding: 12px;
+            }
+
+            .test-feedback .chinese-meaning {
+                font-size: 1.6rem;
+            }
+
+            .test-feedback .image-section {
+                flex: 1 1 auto;
+                min-height: 180px;
             }
             
             .current-theme-label {
@@ -366,6 +459,8 @@
             body.test-mode .cards-container {
                 gap: 6px; /* 测试模式进一步减少间距 */
                 margin-top: 2px;
+                width: 100%;
+                max-width: 100%;
             }
             
             /* 移动端测试模式标题行优化 */
@@ -378,7 +473,7 @@
             
             body.test-mode .card-title-hint {
                 margin-left: 0;
-                font-size: 1rem; /* 减小字体 */
+                font-size: 0.8rem; /* 再减小20%字号 */
                 font-weight: 500;
                 color: #2c3e50;
             }
@@ -392,7 +487,12 @@
             }
             
             body.test-mode .card-title-indicators {
-                font-size: 0.75rem; /* 减小字体 */
+                font-size: 0.6rem; /* 再减小20%字号 */
+            }
+
+            .learning-card-front .meaning-display,
+            .learning-card-back .meaning-display {
+                bottom: -6px; /* 略微下移中文释义 */
             }
         }
         
@@ -401,6 +501,10 @@
             :root {
                 --top-bar-height: 75px; /* 2行布局高度 */
                 --card-height: 280px; /* 进一步减少卡片高度 */
+            }
+
+            body.test-mode {
+                --card-height: 400px; /* 测试模式单题展示，保证题干完整 */
             }
 /*
 推送当前目录所有文件到GitHub仓库的操作命令如下：
@@ -421,9 +525,25 @@ git push -u origin master
                 font-size: 0.85rem; /* 进一步减小字体 */
             }
             
+            .top-bar-left {
+                gap: 10px;
+            }
+            
+            .top-bar-mode-buttons {
+                gap: 4px;
+                flex: 0 1 auto;
+                justify-content: flex-end;
+                min-width: 0;
+            }
+            
             .top-bar-mode-btn {
-                padding: 6px 12px; /* 减少按钮padding */
-                font-size: 0.8rem; /* 减小按钮字体 */
+                padding: 5px 10px; /* 进一步减少按钮padding */
+                font-size: 0.78rem; /* 再次减小按钮字体 */
+                min-width: auto;
+            }
+            
+            .top-bar-mode-btn .icon {
+                font-size: 0.85rem;
             }
             
             .top-bar-progress {
@@ -433,6 +553,8 @@ git push -u origin master
             
             .current-theme-display {
                 padding: 3px 10px; /* 进一步减少padding */
+                flex: 0 0 auto;
+                max-width: 100%;
             }
             
             .current-theme-label {
@@ -470,6 +592,19 @@ git push -u origin master
             body.test-mode .cards-container {
                 gap: 4px; /* 测试模式进一步减少间距 */
                 margin-top: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            body.test-mode .test-title-row {
+                gap: 4px;
+            }
+
+            body.test-mode .test-title-row .test-instruction,
+            body.test-mode .card-title-hint {
+                font-size: 0.68rem; /* 在小屏再减小，约为原来的80% */
+                white-space: normal;
+                overflow-wrap: anywhere;
             }
             
             /* 移动端学习模式文字大小优化 */
@@ -479,13 +614,39 @@ git push -u origin master
             }
             
             .learning-card-back .noun-display {
-                font-size: 2.2rem; /* 稍微减小字体 */
+                font-size: 2rem; /* 略微减小字体，确保单行显示 */
+                display: inline-flex;
+                align-items: baseline;
+                gap: 6px;
+                white-space: nowrap;
+                letter-spacing: 0.5px;
             }
             
             .learning-card-back .meaning-display {
                 font-size: 1.4rem; /* 稍微减小字体 */
                 padding: 8px; /* 减少padding */
                 padding-bottom: 40px; /* 为card-hint留出空间 */
+            }
+
+            .learning-card-front .meaning-display,
+            .learning-card-back .meaning-display {
+                bottom: -8px; /* 小屏设备进一步下移中文释义 */
+            }
+
+            .learning-card-back .card-back-content {
+                gap: 8px;
+            }
+
+            .test-feedback .chinese-section {
+                padding: 10px;
+            }
+
+            .test-feedback .chinese-meaning {
+                font-size: 1.4rem;
+            }
+
+            .test-feedback .image-section {
+                min-height: 150px;
             }
             
             /* 移动端背面card-hint位置调整 */
@@ -546,7 +707,10 @@ git push -u origin master
         
         @media (max-width: 768px) {
             body.test-mode .cards-container {
-                max-width: 90%;
+                max-width: 100%;
+                width: 100%;
+                margin-left: 0;
+                margin-right: 0;
             }
         }
         
@@ -678,6 +842,51 @@ git push -u origin master
             font-size: 0.9rem; /* 1rem * 0.9 */
         }
         
+        /* 移动端下重新约束测试模式标题字号（放在基础规则之后以确保覆盖） */
+        @media (max-width: 768px) {
+            body.test-mode .test-title-row {
+                flex-wrap: nowrap;
+                gap: 8px;
+            }
+            
+            body.test-mode .card-external-title {
+                font-size: clamp(0.62rem, 2.6vw, 0.72rem);
+                gap: 6px;
+            }
+            
+            body.test-mode .card-title-indicators {
+                font-size: clamp(0.58rem, 2.2vw, 0.68rem);
+            }
+            
+            body.test-mode .card-title-hint,
+            body.test-mode .test-title-row .test-instruction {
+                font-size: clamp(0.6rem, 2.8vw, 0.7rem);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body.test-mode .test-title-row {
+                gap: 4px;
+            }
+            
+            body.test-mode .card-external-title {
+                font-size: clamp(0.58rem, 3vw, 0.66rem);
+                gap: 4px;
+            }
+            
+            body.test-mode .card-title-indicators {
+                font-size: clamp(0.54rem, 2.8vw, 0.62rem);
+            }
+            
+            body.test-mode .card-title-hint,
+            body.test-mode .test-title-row .test-instruction {
+                font-size: clamp(0.56rem, 3.4vw, 0.64rem);
+            }
+        }
+        
         .card {
             position: relative;
             height: var(--card-height);
@@ -788,6 +997,19 @@ git push -u origin master
             position: relative;
             top: -5px; /* 图片下移5px（从-10px改为-5px） */
             margin-bottom: -5px; /* 抵消下移造成的底部空白 */
+        }
+        
+        /* 禁止图片被长按保存或拖拽 */
+        .noun-image-container,
+        .noun-image,
+        .test-card .noun-image {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        .noun-image {
+            -webkit-user-drag: none;
         }
         
         /* 学习模式下减小卡片正面的padding，并设置浅灰背景+50%透明度 */
@@ -1298,7 +1520,7 @@ git push -u origin master
             }
             
             .test-title {
-                font-size: 0.95rem; /* 减小标题字体 */
+                font-size: 0.76rem; /* 再减小标题字体（-20%） */
                 margin-bottom: 10px; /* 减少margin */
             }
         }
@@ -1333,7 +1555,7 @@ git push -u origin master
             }
             
             .test-title {
-                font-size: 0.85rem; /* 进一步减小标题字体 */
+                font-size: 0.68rem; /* 在768px基础上继续减小（-20%） */
                 margin-bottom: 8px; /* 进一步减少margin */
             }
         }
@@ -1847,25 +2069,27 @@ git push -u origin master
                 </button>
             </div>
         </div>
-        <div class="top-bar-center">
-            <div class="current-theme-display" id="current-theme-display">
-                <span class="current-theme-label">当前学习：</span>
-                <span class="current-theme-name" id="current-theme-name">-</span>
+        <div class="top-bar-bottom-row">
+            <div class="top-bar-center">
+                <div class="current-theme-display" id="current-theme-display">
+                    <span class="current-theme-label">学习中：</span>
+                    <span class="current-theme-name" id="current-theme-name">-</span>
+                </div>
             </div>
-        </div>
-        <div class="top-bar-right">
-            <div class="top-bar-progress" id="top-bar-progress">
-                <div class="progress-stat completed">
-                    <span class="progress-stat-label">已完成:</span>
-                    <span class="progress-stat-value" id="progress-completed">0</span>
-                </div>
-                <div class="progress-stat learning">
-                    <span class="progress-stat-label">学习中:</span>
-                    <span class="progress-stat-value" id="progress-learning">0</span>
-                </div>
-                <div class="progress-stat locked">
-                    <span class="progress-stat-label">待解锁:</span>
-                    <span class="progress-stat-value" id="progress-locked">0</span>
+            <div class="top-bar-right">
+                <div class="top-bar-progress" id="top-bar-progress">
+                    <div class="progress-stat completed">
+                        <span class="progress-stat-label">已完成:</span>
+                        <span class="progress-stat-value" id="progress-completed">0</span>
+                    </div>
+                    <div class="progress-stat learning">
+                        <span class="progress-stat-label">学习中:</span>
+                        <span class="progress-stat-value" id="progress-learning">0</span>
+                    </div>
+                    <div class="progress-stat locked">
+                        <span class="progress-stat-label">待解锁:</span>
+                        <span class="progress-stat-value" id="progress-locked">0</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2024,6 +2248,29 @@ git push -u origin master
             answers: [],
             startTime: null
         };
+        
+        // ==================== 交互保护 ====================
+        
+        const PROTECTED_MEDIA_SELECTOR = '.noun-image, .noun-image-container, .card, .card-face, .card-inner';
+        
+        function initInteractionGuards() {
+            const shouldBlock = (target) => {
+                const element = target instanceof Element ? target : target && target.parentElement;
+                return element && element.closest(PROTECTED_MEDIA_SELECTOR);
+            };
+            
+            document.addEventListener('contextmenu', (event) => {
+                if (shouldBlock(event.target)) {
+                    event.preventDefault();
+                }
+            });
+            
+            document.addEventListener('dragstart', (event) => {
+                if (event.target && event.target.matches && event.target.matches('.noun-image')) {
+                    event.preventDefault();
+                }
+            });
+        }
 
         // ==================== 工具函数 ====================
         
@@ -4676,6 +4923,8 @@ git push -u origin master
         
         document.addEventListener('DOMContentLoaded', function() {
             console.log('=== 页面初始化开始 ===');
+            
+            initInteractionGuards();
             
             // 初始化DOM缓存（必须在最前面，因为其他函数依赖它）
             domCache.init();
