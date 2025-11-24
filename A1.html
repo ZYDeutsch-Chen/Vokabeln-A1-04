@@ -8,7 +8,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <!-- 版本号 - 每次修改代码时更新此版本号，让浏览器认为这是新版本 -->
-    <meta name="version" content="1.0.5">
+    <meta name="version" content="1.0.6">
     <title>德语A1词汇卡片 - 名词学习</title>
     <!-- Favicon - 使用SVG格式，避免404错误 -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📚%3C/text%3E%3C/svg%3E">
@@ -16,7 +16,7 @@
     <script>
         // 强制刷新缓存机制 - 解决 Firefox 缓存问题
         (function() {
-            const CURRENT_VERSION = '1.0.5'; // 与 meta version 保持一致
+            const CURRENT_VERSION = '1.0.6'; // 与 meta version 保持一致
             const VERSION_STORAGE_KEY = 'a1_vocab_version';
             
             // 检查版本并强制刷新
@@ -1648,32 +1648,32 @@ git push -u origin master
 
         /* 测试卡片正面布局优化 */
         .test-card .card-front {
-            padding: 20px 0 20px 25px;
+            padding: 18px 0 18px 24px;
         }
         
         .test-card .card-front-content {
-            padding-right: 15px;
+            padding-right: 12px;
         }
         
         /* 测试卡片背面布局优化 */
         .test-card .card-back {
-            padding: 0;
+            padding: 18px 24px;
         }
 
         .test-options {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 14px;
             padding: 0;
-            padding-bottom: 10px; /* 增加底部padding，防止最后一个选项被剪切 */
+            padding-bottom: 8px; /* 增加底部padding，防止最后一个选项被剪切 */
             flex: 1;
             overflow-y: auto; /* 如果选项太多，允许滚动 */
             min-height: 0; /* 允许flex子元素缩小 */
         }
 
         .test-option {
-            padding: 14px 18px;
+            padding: 12px 18px;
             background: white;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
@@ -1688,17 +1688,17 @@ git push -u origin master
         /* 移动端测试卡片布局优化 */
         @media (max-width: 768px) {
             .test-card .card-front {
-                padding: 12px 0 12px 18px; /* 减少padding */
+                padding: 12px 0 12px 16px; /* 减少padding */
             }
             
             .test-card .card-front-content {
-                padding-right: 10px; /* 减少padding */
+                padding-right: 9px; /* 减少padding */
             }
             
             .test-options {
-                gap: 8px; /* 减少选项间距 */
-                margin-top: 12px; /* 减少margin-top */
-                padding-bottom: 8px; /* 移动端增加底部padding */
+                gap: 7px; /* 减少选项间距 */
+                margin-top: 10px; /* 减少margin-top */
+                padding-bottom: 7px; /* 移动端增加底部padding */
             }
             
             .test-option {
@@ -1714,17 +1714,17 @@ git push -u origin master
         
         @media (max-width: 480px) {
             .test-card .card-front {
-                padding: 8px 0 8px 15px; /* 进一步减少padding */
+                padding: 7px 0 7px 12px; /* 进一步减少padding */
             }
             
             .test-card .card-front-content {
-                padding-right: 8px; /* 进一步减少padding */
+                padding-right: 6px; /* 进一步减少padding */
             }
             
             .test-options {
-                gap: 6px; /* 进一步减少选项间距 */
-                margin-top: 8px; /* 进一步减少margin-top */
-                padding-bottom: 6px; /* 小屏幕增加底部padding */
+                gap: 5px; /* 进一步减少选项间距 */
+                margin-top: 6px; /* 进一步减少margin-top */
+                padding-bottom: 5px; /* 小屏幕增加底部padding */
             }
             
             .test-option {
@@ -1790,14 +1790,14 @@ git push -u origin master
             font-weight: 700;
             color: #2c3e50;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
             padding: 0;
             margin-top: 0;
             flex-shrink: 0; /* 防止题目被压缩 */
         }
 
         .test-feedback {
-            padding: 0;
+            padding: 18px 24px 20px 24px;
             display: flex;
             flex-direction: column;
             align-items: stretch;
@@ -1805,16 +1805,18 @@ git push -u origin master
             overflow: hidden;
             box-sizing: border-box;
             position: relative;
+            gap: 12px;
         }
 
         /* 上方中文显示区域 */
         .test-feedback .chinese-section {
-            flex: 0 0 40%;
+            flex: 0 0 auto;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
+            justify-content: flex-start;
+            padding: 0 10px 4px 10px;
             box-sizing: border-box;
+            min-height: 0;
         }
 
         .test-feedback .chinese-meaning {
@@ -1827,12 +1829,12 @@ git push -u origin master
 
         /* 下方图片区域 - 占据卡片高度的60%，底部对齐 */
         .test-feedback .image-section {
-            flex: 0 0 60%;
+            flex: 1 1 auto;
             display: flex;
-            align-items: flex-end;
+            align-items: flex-start;
             justify-content: center;
             min-width: 0;
-            padding: 0;
+            padding: 0 10px 10px 10px;
             box-sizing: border-box;
             position: relative;
             overflow: hidden;
