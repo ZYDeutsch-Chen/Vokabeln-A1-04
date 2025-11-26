@@ -714,6 +714,70 @@ git push -u origin master
             }
         }
         
+        @media (max-width: 768px) {
+            .cards-container {
+                justify-items: center;
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            
+            .cards-container .card-wrapper {
+                width: 100%;
+            }
+            
+            .cards-container .card {
+                max-width: 440px;
+                width: min(100%, 440px);
+                margin: 0 auto;
+            }
+            
+            .learning-card-front .noun-image-container {
+                min-height: 210px;
+            }
+            
+            body.test-mode .cards-container {
+                gap: 4px;
+                margin-top: 0;
+                padding-bottom: 4px;
+            }
+            
+            body.test-mode .card-wrapper {
+                margin-top: 4px;
+            }
+            
+            body.test-mode .test-title-row {
+                margin-bottom: 2px;
+                padding: 0 4px;
+            }
+            
+            body.test-mode .test-card .card-front,
+            body.test-mode .test-card .card-back {
+                padding: 12px 14px;
+            }
+            
+            body.test-mode .test-card .card-front-content {
+                padding-bottom: 6px;
+            }
+            
+            body.test-mode .test-question {
+                margin-bottom: 8px;
+            }
+            
+            body.test-mode .test-card .test-options {
+                gap: 6px;
+            }
+            
+            body.test-mode .test-card .test-feedback {
+                padding: 12px 14px 14px 14px;
+                gap: 8px;
+            }
+            
+            body.test-mode .test-card .test-feedback .chinese-section,
+            body.test-mode .test-card .test-feedback .image-section {
+                padding: 0 6px;
+            }
+        }
+        
         /* 测试提示文字 */
         .test-instruction {
             text-align: center;
@@ -860,7 +924,7 @@ git push -u origin master
             
             body.test-mode .card-title-hint,
             body.test-mode .test-title-row .test-instruction {
-                font-size: clamp(0.6rem, 2.8vw, 0.7rem);
+                font-size: clamp(0.69rem, 3.2vw, 0.81rem);
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -883,7 +947,7 @@ git push -u origin master
             
             body.test-mode .card-title-hint,
             body.test-mode .test-title-row .test-instruction {
-                font-size: clamp(0.56rem, 3.4vw, 0.64rem);
+                font-size: clamp(0.64rem, 3.9vw, 0.74rem);
             }
         }
         
@@ -894,6 +958,43 @@ git push -u origin master
             cursor: pointer;
             width: 100%;
             max-width: 100%;
+        }
+        
+        .carryover-badge {
+            position: absolute;
+            top: 10px;
+            left: 12px;
+            background: rgba(255, 193, 7, 0.92);
+            color: #2c3e50;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            z-index: 20;
+            letter-spacing: 1px;
+        }
+        
+        .card-back .carryover-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .carryover-badge.small {
+            position: relative;
+            top: auto;
+            left: auto;
+            background: rgba(255, 193, 7, 0.2);
+            color: #c47a00;
+            font-size: 0.68rem;
+            padding: 2px 8px;
+            border: 1px solid rgba(255, 193, 7, 0.6);
+            box-shadow: none;
+        }
+        
+        .carryover-card .card-face {
+            border: 2px dashed rgba(255, 193, 7, 0.5);
         }
         
         .card-inner {
@@ -2238,7 +2339,8 @@ git push -u origin master
             currentMode: 'learning',  // 'learning' 或 'test'
             currentTestType: null,    // 'test1' 或 'test2'
             currentTheme: null,
-            themes: {}
+            themes: {},
+            carryOverMistakes: []
         };
 
         // 当前测试状态
@@ -2250,6 +2352,54 @@ git push -u origin master
             answers: [],
             startTime: null
         };
+        
+        function ensureCarryOverStorage() {
+            if (!learningProgress.carryOverMistakes) {
+                learningProgress.carryOverMistakes = [];
+            }
+            return learningProgress.carryOverMistakes;
+        }
+        
+        function getCarryOverMistakes() {
+            return ensureCarryOverStorage();
+        }
+        
+        function addCarryOverMistake(word) {
+            if (!word || !word.noun) return;
+            const carryOverList = ensureCarryOverStorage();
+            const exists = carryOverList.some(item => item.noun === word.noun);
+            if (exists) {
+                return;
+            }
+            carryOverList.push({
+                noun: word.noun,
+                meaning: word.meaning,
+                image: word.image,
+                category: word.category,
+                gender: word.gender,
+                carryOver: true,
+                originTheme: learningProgress.currentTheme || word.category
+            });
+        }
+        
+        function removeCarryOverMistake(noun) {
+            if (!noun) return;
+            const carryOverList = ensureCarryOverStorage();
+            const nextList = carryOverList.filter(item => item.noun !== noun);
+            learningProgress.carryOverMistakes = nextList;
+        }
+        
+        function lockCardInteraction(card, duration = 700) {
+            if (!card) return;
+            card.dataset.interactionLocked = 'true';
+            if (card._interactionLockTimer) {
+                clearTimeout(card._interactionLockTimer);
+            }
+            card._interactionLockTimer = setTimeout(() => {
+                delete card.dataset.interactionLocked;
+                card._interactionLockTimer = null;
+            }, duration);
+        }
         
         // ==================== 交互保护 ====================
         
@@ -2410,7 +2560,8 @@ git push -u origin master
                 currentMode: 'learning',
                 currentTestType: null,
                 currentTheme: themes[0] || null,
-                themes: {}
+                themes: {},
+                carryOverMistakes: []
             };
 
             themes.forEach((theme, index) => {
@@ -2472,6 +2623,10 @@ git push -u origin master
                         themeData.test1.status = 'available';
                     }
                 });
+                            }
+                            
+                            if (!Array.isArray(learningProgress.carryOverMistakes)) {
+                                learningProgress.carryOverMistakes = [];
                             }
                         }
                     } catch (parseError) {
@@ -2547,17 +2702,25 @@ git push -u origin master
                 domCache.fixedTopBar.style.display = 'flex';
             }
             
+            const testProgress = document.getElementById('test-progress');
+            const testInstruction = document.getElementById('test-instruction');
+            
             if (mode === 'learning') {
-                document.getElementById('test-progress').style.display = 'none';
-                document.getElementById('test-instruction').style.display = 'none';
+                if (testProgress) {
+                    testProgress.style.display = 'none';
+                }
+                if (testInstruction) {
+                    testInstruction.style.display = 'none';
+                }
                 document.body.classList.remove('test-mode'); /* 移除测试模式类 */
                 loadCurrentTheme();
             } else {
-                document.getElementById('test-progress').style.display = 'flex'; /* 改为flex */
-                // 不再显示原来的测试提示文字，因为它会被移到标题行中
-                // document.getElementById('test-instruction').style.display = 'block';
+                if (testProgress) {
+                    testProgress.style.display = 'flex'; /* 改为flex */
+                }
                 document.body.classList.add('test-mode'); /* 添加测试模式类 */
-                startTest('test1');
+                const nextTestType = learningProgress.currentTestType || 'test1';
+                startTest(nextTestType);
             }
         }
         
@@ -3655,6 +3818,20 @@ git push -u origin master
                 console.log('过滤类别 "' + category + '" 后长度:', filteredVocabulary.length);
             }
             
+            if (category !== 'all') {
+                const carryOverCards = getCarryOverMistakes();
+                if (carryOverCards.length > 0) {
+                    const existingWords = new Set(filteredVocabulary.map(item => item.noun));
+                    const uniqueCarryOvers = carryOverCards
+                        .filter(card => card && card.noun && !existingWords.has(card.noun))
+                        .map(card => ({ ...card, carryOver: true }));
+                    if (uniqueCarryOvers.length > 0) {
+                        console.log('追加复习卡片数量:', uniqueCarryOvers.length);
+                        filteredVocabulary = [...filteredVocabulary, ...uniqueCarryOvers];
+                    }
+                }
+            }
+            
             // 更新总数
             const totalCountElement = document.getElementById('total-count');
             if (totalCountElement) {
@@ -3699,11 +3876,18 @@ git push -u origin master
                     ? `<div class="gender-badge ${genderInfo.class}">${genderInfo.text}</div>` 
                     : '';
                 
+                const isCarryOverCard = !!item.carryOver;
+                card.dataset.carryOver = isCarryOverCard ? 'true' : 'false';
+                const carryOverBadge = isCarryOverCard 
+                    ? `<div class="carryover-badge" title="来自上一主题的复习卡">复习卡</div>`
+                    : '';
+                
                 // 学习模式卡片：正面显示中文+图片，背面显示德语+词性+发音
                 card.innerHTML = `
                     <div class="card-inner">
                         <!-- 卡片正面：中文+图片 -->
                         <div class="card-face card-front learning-card-front">
+                            ${carryOverBadge}
                             <div class="noun-image-container">
                                 <img 
                                     src="${imagePath}" 
@@ -3723,6 +3907,7 @@ git push -u origin master
                         
                         <!-- 卡片背面：德语+词性+发音+中文 -->
                         <div class="card-face card-back learning-card-back">
+                            ${carryOverBadge}
                             <div class="card-back-content">
                                 <div class="noun-display">${item.noun}</div>
                                 ${genderBadge}
@@ -3845,7 +4030,18 @@ git push -u origin master
             
             // 生成测试题目
             const testTypeName = testType === 'test1' ? 'meaning' : 'gender';
-            generateTestQuestions(theme, testTypeName);
+            const generated = generateTestQuestions(theme, testTypeName);
+            if (!generated) {
+                const container = domCache.cardsContainer || document.getElementById('cards-container');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="loader">
+                            <span class="icon">ℹ️</span> 暂无可测试的卡片，请先完成学习或复习上一主题。
+                        </div>
+                    `;
+                }
+                return;
+            }
             
             // 渲染第一题
             renderTestCard(0);
@@ -3863,24 +4059,76 @@ git push -u origin master
         // 生成测试题目
         function generateTestQuestions(theme, type) {
             const themeWords = vocabulary.filter(item => item.category === theme);
-            const shuffled = [...themeWords].sort(() => Math.random() - 0.5);
-            const questions = shuffled.slice(0, Math.min(10, shuffled.length));
+            const shuffledThemeWords = [...themeWords].sort(() => Math.random() - 0.5);
+            const baseCount = themeWords.length === 0 ? 0 : Math.max(1, Math.ceil(themeWords.length * 0.6));
+            const targetCount = Math.min(baseCount, themeWords.length);
+            
+            const carryOverWords = getCarryOverMistakes();
+            const carryOverMap = new Map();
+            carryOverWords.forEach(word => {
+                if (word && word.noun) {
+                    carryOverMap.set(word.noun, word);
+                }
+            });
+            
+            const selectedThemeWords = [];
+            for (const word of shuffledThemeWords) {
+                if (!carryOverMap.has(word.noun)) {
+                    selectedThemeWords.push(word);
+                }
+                if (selectedThemeWords.length >= targetCount) {
+                    break;
+                }
+            }
+            
+            const buildQuestion = (word, index, source = 'theme') => ({
+                id: `${source}-${word.noun}-${index}`,
+                word,
+                source,
+                correctAnswer: type === 'meaning' ? word.meaning : (word.gender || (isPluralNoun(word.noun) ? 'die' : 'die')),
+                options: type === 'meaning' 
+                    ? generateMeaningOptions(word, vocabulary.filter(item => item.category === word.category))
+                    : generateGenderOptions(word)
+            });
+            
+            const carryOverQuestions = carryOverWords
+                .filter(word => word && word.noun)
+                .map((word, index) => buildQuestion(word, index, 'carryover'));
+            const themeQuestions = selectedThemeWords
+                .map((word, index) => buildQuestion(word, index + carryOverQuestions.length, 'theme'));
+            
+            const combinedQuestions = [...carryOverQuestions, ...themeQuestions];
+            
+            if (combinedQuestions.length === 0) {
+                alert('当前主题暂无可用题目，请先完成学习或复习上一主题。');
+                return false;
+            }
             
             currentTest = {
                 type: type,
                 theme: theme,
-                questions: questions.map((word, index) => ({
-                    id: index,
-                    word: word,
-                    correctAnswer: type === 'meaning' ? word.meaning : (word.gender || (isPluralNoun(word.noun) ? 'die' : 'die')),
-                    options: type === 'meaning' 
-                        ? generateMeaningOptions(word, themeWords)
-                        : generateGenderOptions(word)
-                })),
+                questions: combinedQuestions,
                 currentIndex: 0,
                 answers: [],
                 startTime: Date.now()
             };
+            
+            return true;
+        }
+        
+        function syncCarryOverMistakesAfterTest() {
+            if (!currentTest || !Array.isArray(currentTest.questions)) return;
+            const isMeaningTest = currentTest.type === 'meaning';
+            currentTest.questions.forEach((question, index) => {
+                if (!question || !question.word) return;
+                const noun = question.word.noun;
+                const answer = currentTest.answers[index];
+                if (answer && answer.correct) {
+                    removeCarryOverMistake(noun);
+                } else if (isMeaningTest && question.source === 'theme') {
+                    addCarryOverMistake(question.word);
+                }
+            });
         }
 
         // 语义相关的干扰项映射（精心设计的诱惑选项）
@@ -4265,6 +4513,12 @@ git push -u origin master
                 </div>
                 <span class="card-title-hint">请找出和德语单词匹配的选项：</span>
             `;
+            if (question.source === 'carryover') {
+                const badge = document.createElement('span');
+                badge.className = 'carryover-badge small';
+                badge.textContent = '复习卡';
+                cardTitle.appendChild(badge);
+            }
             
             // 将外部标题添加到标题行
             titleRow.appendChild(cardTitle);
@@ -4275,6 +4529,9 @@ git push -u origin master
             
             const card = document.createElement('div');
             card.className = 'card test-card';
+            if (question.source === 'carryover') {
+                card.classList.add('carryover-card');
+            }
             
             const imagePath = getImagePath(question.word.image, question.word.category);
             const genderInfo = getGenderInfo(question.word.gender, question.word.noun);
@@ -4383,8 +4640,10 @@ git push -u origin master
                 currentTest.answers[questionIndex].correct = isCorrect;
                 
                 // 自动翻转显示答案
+                lockCardInteraction(card, 800);
                 setTimeout(() => {
                     card.classList.add('flipped');
+                    lockCardInteraction(card, 350);
                     // 更新外部标题的激活状态和提示文字（从标题行中查找）
                     const titleRow = container.querySelector('.test-title-row');
                     if (titleRow) {
@@ -4423,6 +4682,9 @@ git push -u origin master
             
             // 添加点击事件处理，支持手动翻转
             card.addEventListener('click', function(e) {
+                if (this.dataset.interactionLocked === 'true') {
+                    return;
+                }
                 // 如果点击的是选项按钮，不翻转卡片
                 if (e.target.closest('.test-option')) {
                     return;
@@ -4450,7 +4712,7 @@ git push -u origin master
                         }
                         return;
                     }
-                    
+                    lockCardInteraction(this, 650);
                     // 正常翻转逻辑
                     this.classList.toggle('flipped');
                     const isFlipped = this.classList.contains('flipped');
@@ -4564,10 +4826,12 @@ git push -u origin master
             // 答对时自动翻转，答错时停留让用户查看错误选项
             if (isCorrect) {
                 // 答对：延迟后自动翻转卡片显示反馈
+            const card = document.querySelector('.test-card');
+            lockCardInteraction(card, 1100);
             setTimeout(() => {
-                const card = document.querySelector('.test-card');
                 if (card) {
                     card.classList.add('flipped');
+                    lockCardInteraction(card, 400);
                         // 更新外部标题的激活状态（从标题行中查找）
                         const container = domCache.cardsContainer || document.getElementById('cards-container');
                         const titleRow = container ? container.querySelector('.test-title-row') : null;
@@ -4645,9 +4909,12 @@ git push -u origin master
 
         // 完成测试
         function completeTest() {
-            const correctCount = currentTest.answers.filter(a => a.correct).length;
+            const correctCount = currentTest.answers.filter(a => a && a.correct).length;
             const totalCount = currentTest.questions.length;
             const passRate = correctCount / totalCount;
+            
+            // 在记录结果前同步复习卡
+            syncCarryOverMistakesAfterTest();
             
             const testType = learningProgress.currentTestType;
             const theme = learningProgress.currentTheme;
@@ -4978,14 +5245,12 @@ git push -u origin master
                     if (domCache.fixedTopBar) {
                         domCache.fixedTopBar.style.display = 'flex';
                     }
-                    updateHeaderDescription();
                     updateTopBarProgress();
-                    updateCurrentThemeDisplay();
                     
-                    // 加载当前主题（内部会检查vocabulary）
-                    console.log('开始加载当前主题...');
-                    loadCurrentTheme();
-                    console.log('loadCurrentTheme函数已调用');
+                    const initialMode = learningProgress.currentMode || 'learning';
+                    console.log('按照上次使用的模式恢复界面:', initialMode);
+                    switchMode(initialMode);
+                    console.log('模式初始化完成');
                     
                     // 延迟执行，确保卡片已渲染后再更新遮挡层高度
                     setTimeout(() => {
