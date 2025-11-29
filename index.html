@@ -2,15 +2,170 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=A1.html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 缓存控制 - 防止浏览器缓存导致样式不一致 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <!-- 版本号 - 每次修改代码时更新此版本号，让浏览器认为这是新版本 -->
+    <meta name="version" content="1.0.6">
     <title>德语A1词汇卡片 - 名词学习</title>
-    <script>
-        // 立即重定向
-        window.location.href = 'A1.html';
-    </script>
+    <!-- Favicon - 使用SVG格式，避免404错误 -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📚%3C/text%3E%3C/svg%3E">
+    <!-- Font Awesome 已移除，使用 Unicode 符号实现离线使用 -->
+    <link rel="stylesheet" href="styles.css?v=1.0.6">
 </head>
 <body>
-    <p>正在跳转到 <a href="A1.html">A1.html</a>...</p>
+    <!-- 初始设置弹窗 -->
+    <div id="setup-modal" class="modal">
+        <div class="modal-content">
+            <h2>欢迎使用德语A1词汇学习系统</h2>
+            <p>请先完成初始设置</p>
+            <div class="setup-form">
+                <div class="setup-group">
+                    <label>用户类型：</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="userType" value="adult" checked>
+                            <span>成人</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="userType" value="teenager">
+                            <span>青少年</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="setup-group">
+                    <label>学习能力：</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="ability" value="normal" checked>
+                            <span>普通</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="ability" value="good">
+                            <span>良好</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="ability" value="excellent">
+                            <span>优秀</span>
+                        </label>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="saveUserConfig()">开始学习</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 固定悬浮栏 -->
+    <div class="fixed-top-bar" id="fixed-top-bar" style="display: none;">
+        <div class="top-bar-left">
+            <div class="top-bar-title">至元德语 - A1词汇卡片学习</div>
+            <div class="top-bar-mode-buttons">
+                <button class="top-bar-mode-btn active" data-mode="learning" onclick="switchMode('learning')">
+                    <span class="icon">📖</span> 学习
+                </button>
+                <button class="top-bar-mode-btn" data-mode="test" onclick="switchMode('test')">
+                    <span class="icon">✓</span> 测试
+                </button>
+            </div>
+        </div>
+        <div class="top-bar-bottom-row">
+            <div class="top-bar-center">
+                <div class="current-theme-display" id="current-theme-display">
+                    <span class="current-theme-label">学习中：</span>
+                    <span class="current-theme-name" id="current-theme-name">-</span>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="top-bar-progress" id="top-bar-progress">
+                    <div class="progress-stat completed">
+                        <span class="progress-stat-label">已完成:</span>
+                        <span class="progress-stat-value" id="progress-completed">0</span>
+                    </div>
+                    <div class="progress-stat learning">
+                        <span class="progress-stat-label">学习中:</span>
+                        <span class="progress-stat-value" id="progress-learning">0</span>
+                    </div>
+                    <div class="progress-stat locked">
+                        <span class="progress-stat-label">待解锁:</span>
+                        <span class="progress-stat-value" id="progress-locked">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模式切换器 - 已移到固定栏，保留用于兼容 -->
+    <div class="mode-switcher" id="mode-switcher" style="display: none;">
+        <button class="mode-btn active" data-mode="learning" onclick="switchMode('learning')">
+            <span class="icon">📖</span> 学习模式
+        </button>
+        <button class="mode-btn" data-mode="test" onclick="switchMode('test')">
+            <span class="icon">✓</span> 测试模式
+        </button>
+    </div>
+
+    <!-- 主题导航 - 已移到固定栏，保留用于兼容 -->
+    <div class="theme-navigation" id="theme-navigation" style="display: none;">
+        <div class="theme-list" id="theme-list"></div>
+    </div>
+
+    <!-- 测试进度显示 - 侧边竖向窄条 -->
+    <div class="test-progress" id="test-progress" style="display: none;">
+        <div class="progress-info">
+            <span id="test-type-label">语义测试</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-label" id="test-progress-label">0/0</div>
+    </div>
+
+    <!-- 解锁通知弹窗 -->
+    <div id="unlock-modal" class="modal" style="display: none;">
+        <div class="modal-content unlock-content">
+            <h2>🎉 恭喜解锁！</h2>
+            <p id="unlock-message"></p>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="startTest2()">开始词性测试</button>
+                <button class="btn-secondary" onclick="skipToNextTheme()">跳过，进入下一主题</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 重试提示弹窗 -->
+    <div id="retry-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>测试未通过</h2>
+            <p id="retry-message"></p>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="returnToLearning()">返回学习</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="header">
+        <h1>德语A1词汇卡片 - 名词学习</h1>
+        <p id="header-description">按主题分类 | 点击<span class="icon">🔊</span>发音 | 点击卡片翻转查看</p>
+    </div>
+    
+    <!-- 测试提示文字 -->
+    <div class="test-instruction" id="test-instruction" style="display: none;">
+        请找出和德语单词匹配的选项：
+    </div>
+    
+    <!-- 卡片容器 -->
+    <div class="cards-container" id="cards-container">
+        <div class="loader">
+            <span class="icon icon-spin">⟳</span> 正在加载词汇卡片...
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>德语A1词汇学习卡片 | 按主题分类</p>
+        <p>总计: <span id="total-count">0</span>个词汇</p>
+    </div>
+    <script src="app.js?v=1.0.6" defer></script>
 </body>
 </html>
-
